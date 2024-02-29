@@ -1,11 +1,12 @@
-import './App.css'
+import { Header, Main } from './components';
 
 function App() {
   return (
     <div>
-      <div>Hello World!</div>
+      <Header />
+      <Main />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
