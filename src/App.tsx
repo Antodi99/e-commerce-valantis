@@ -9,7 +9,7 @@ function App() {
   return (
     <div>
       <Header name={name} setName={setName} brand={brand} setBrand={setBrand} price={price} setPrice={setPrice} />
-      <Main />
+      <Main name={name} setName={setName} brand={brand} setBrand={setBrand} price={price} setPrice={setPrice}/>
     </div>
   );
 }

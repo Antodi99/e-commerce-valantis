@@ -11,7 +11,7 @@ function getXAuth(password: string, timestamp: string) {
 }
 
 // Filter call
-export async function getFilteredItems() {
+export async function getFilteredItems(product: string, price: number, brand: string) {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -21,12 +21,11 @@ export async function getFilteredItems() {
       },
       body: JSON.stringify({
         "action": "filter",
-        "params": { "price": 120000.0 }
+        "params": { "product": product, "price": price, "brand": brand }
       })
     })
     const dataIds = await response.json()
-    const data = await getItems(dataIds.result)
-    return data.result
+    return dataIds.result
   } catch (err) {
     console.log(err)
   }
@@ -47,14 +46,14 @@ export async function getIds(offset: number, limit: number) {
       })
     })
     const data = await response.json()
-    return data
+    return data.result
   } catch (err) {
     console.log(err)
   }
 }
 
 // GetItems call (limit: 100)
-async function getItems(ids: string[]) {
+export async function getItems(ids: string[]) {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -68,7 +67,7 @@ async function getItems(ids: string[]) {
       })
     })
     const data = await response.json()
-    return data
+    return data.result
   } catch (err) {
     console.log(err)
   }
