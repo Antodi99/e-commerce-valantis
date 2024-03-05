@@ -1,49 +1,13 @@
 import { useEffect, useState } from "react";
 import { Card } from ".";
-import { getIds, getItems } from "../api/api";
 import { CardProps } from "./Card";
 import { HeaderAndMainProps } from "./types";
-
-const uniqIDs = new Set()
-const uniqIDsCards = new Set()
-const limit = 60
-let offset = 0
+import { getUniqueIds } from "./utils/getUniqueIdsDefault";
 
 function Main({ name, setName, brand, setBrand, price, setPrice }: HeaderAndMainProps) {
   const [cards, setCards] = useState<CardProps[]>([])
 
-  async function getUniqueIds() {
-    const ids = await getIds(offset, limit);
-    const chunk = []
-
-    for (let i = 0; i < ids.length; i++) {
-      if (!uniqIDs.has(ids[i])) {
-        uniqIDs.add(ids[i])
-        chunk.push(ids[i])
-
-        if (chunk.length === 50) {
-          offset += i;
-          break;
-        }
-      }
-    }
-
-    const allCards = await getItems(chunk)
-    const cards = []
-
-    for (let i = 0; i < allCards.length; i++) {
-      if (!uniqIDsCards.has(allCards[i].id)) {
-        uniqIDsCards.add(allCards[i].id)
-        cards.push(allCards[i])
-        if (cards.length === 50) {
-          break;
-        }
-      }
-    }
-    return cards
-  }
-
-  function handleClick() {
+  function handleClickNext() {
     setCards([])
     getUniqueIds().then((cards) => {
       setCards(cards)
@@ -52,7 +16,6 @@ function Main({ name, setName, brand, setBrand, price, setPrice }: HeaderAndMain
 
   useEffect(() => {
     getUniqueIds().then((cards) => {
-      console.log(cards.length)
       setCards(cards)
     })
   }, [])
@@ -74,7 +37,7 @@ function Main({ name, setName, brand, setBrand, price, setPrice }: HeaderAndMain
         }
       </div>
       <button className="bg-white w-52 h-16 mb-10 rounded-xl font-bold"
-        onClick={() => handleClick()}
+        onClick={() => handleClickNext()}
       >
         Next
       </button>
