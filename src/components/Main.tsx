@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Card } from ".";
-import { CardProps } from "./Card";
 import { HeaderAndMainProps } from "./types";
 import { getUniqueIds } from "./utils/getUniqueIdsDefault";
+import { getFilteredItems, getCards, Card as TCard } from "../api/api";
+import { retry } from "./utils/retry";
+
 
 function Main({ name, setName, brand, setBrand, price, setPrice }: HeaderAndMainProps) {
-  const [cards, setCards] = useState<CardProps[]>([])
+  const [cards, setCards] = useState<TCard[]>([])
 
   function handleClickNext() {
     setCards([])
@@ -15,10 +17,19 @@ function Main({ name, setName, brand, setBrand, price, setPrice }: HeaderAndMain
   }
 
   useEffect(() => {
-    getUniqueIds().then((cards) => {
-      setCards(cards)
-    })
-  }, [])
+    if (!name && !brand && !price) {
+      setCards([])
+      getUniqueIds(true).then((cards) => {
+        setCards(cards)
+      })
+    } else {
+      setCards([])
+      retry(getFilteredItems)(name, price, brand).then(async (ids: unknown) => {
+        const data = await (retry(getCards)(ids))
+        setCards(data as TCard[])
+      })
+    }
+  }, [brand, name, price])
 
   return (
     <main className="min-h-full w-full flex flex-col justify-center items-center">

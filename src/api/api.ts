@@ -11,8 +11,19 @@ function getXAuth(password: string, timestamp: string) {
 }
 
 // Filter call
-export async function getFilteredItems(product: string, price: number, brand: string) {
-  return await fetch(API_URL, {
+export async function getFilteredItems(name?: string, price?: number, brand?: string) {
+  const params: { product?: string, brand?: string, price?: number } = {}
+  if (name) {
+    params["product"] = name
+  }
+  if (brand) {
+    params["brand"] = brand
+  }
+  if (price && price !== 0) {
+    params["price"] = price
+  }
+
+  return fetch(API_URL, {
     method: "POST",
     headers: {
       "X-Auth": xAuth,
@@ -20,13 +31,15 @@ export async function getFilteredItems(product: string, price: number, brand: st
     },
     body: JSON.stringify({
       "action": "filter",
-      "params": { "product": product, "price": price, "brand": brand }
+      "params": params
     })
   })
+    .then((data) => data.json())
+    .then((data) => data.result)
 }
 
 // GetIds call
-export async function getIds(offset: number, limit: number) {
+export async function getIds(offset: number, limit: number): Promise<string[]> {
   return fetch(API_URL, {
     method: "POST",
     headers: {
@@ -38,11 +51,20 @@ export async function getIds(offset: number, limit: number) {
       "params": { "offset": offset, "limit": limit }
     })
   })
+    .then((data) => data.json())
+    .then((data) => data.result)
+}
+
+export type Card = {
+  brand: string,
+  id: string,
+  price: number,
+  product: string
 }
 
 // GetItems call (limit: 100)
-export async function getItems(ids: string[]) {
-  return await fetch(API_URL, {
+export async function getCards(ids: string[]): Promise<Card[]> {
+  return fetch(API_URL, {
     method: "POST",
     headers: {
       "X-Auth": xAuth,
@@ -53,4 +75,6 @@ export async function getItems(ids: string[]) {
       "params": { "ids": ids }
     })
   })
+    .then((data) => data.json())
+    .then((data) => data.result)
 }

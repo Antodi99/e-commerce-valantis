@@ -1,4 +1,4 @@
-import { getIds, getItems } from "../../api/api";
+import { getIds, getCards, Card } from "../../api/api";
 import { retry } from "./retry";
 
 const uniqIDs = new Set()
@@ -6,11 +6,15 @@ const uniqIDsCards = new Set()
 const limit = 60
 let offset = 0
 
-export async function getUniqueIds() {
-  const ids = await (retry(getIds))(offset, limit)
-  const chunk = []
+export async function getUniqueIds(flush = false) {
+  if (flush) {
+    offset = 0
+    uniqIDs.clear()
+    uniqIDsCards.clear()
+  }
 
-  console.log(ids)
+  const ids = await (retry(getIds))(offset, limit) as string[]
+  const chunk = []
 
   for (let i = 0; i < ids.length; i++) {
     if (!uniqIDs.has(ids[i])) {
@@ -23,7 +27,7 @@ export async function getUniqueIds() {
     }
   }
 
-  const allCards = await (retry(getItems))(chunk)
+  const allCards = await (retry(getCards))(chunk) as Card[]
   const cards = []
 
   for (let i = 0; i < allCards.length; i++) {

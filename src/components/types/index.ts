@@ -1,6 +1,6 @@
-import { handleChangeProps, HeaderAndMainProps } from "./types";
+import { HandleChangeProps, HeaderAndMainProps } from "./types";
 
 export type {
-  handleChangeProps,
+  HandleChangeProps as handleChangeProps,
   HeaderAndMainProps
 }
