@@ -1,6 +1,16 @@
-import { HeaderAndMainProps, handleChangeProps } from "./types"
+import { handleChangeProps } from "./types"
 
-function Header({ name, setName, brand, setBrand, price, setPrice }: HeaderAndMainProps) {
+type HeaderProps = {
+  name: string | undefined
+  setName: React.Dispatch<React.SetStateAction<string>>
+  brand: string | undefined
+  setBrand: React.Dispatch<React.SetStateAction<string>>
+  price: number | undefined
+  setPrice: React.Dispatch<React.SetStateAction<number | undefined>>
+  getFilteredCards: () => Promise<void>
+}
+
+function Header({ name, setName, brand, setBrand, price, setPrice, getFilteredCards }: HeaderProps) {
   function handleChangeText({ event, type }: handleChangeProps) {
     const value = event.target.value
       .replace(/[^A-Za-zА-Яа-я\s]/g, '')
@@ -29,6 +39,7 @@ function Header({ name, setName, brand, setBrand, price, setPrice }: HeaderAndMa
           value={brand} onChange={(event) => handleChangeText({ event, type: 'brand' })} />
         <input type='text' placeholder='price' className='w-60 h-12 border-2 text-lg'
           value={price} onChange={(event) => handleChangeNumber({ event })} />
+        <button onClick={() => getFilteredCards()}>Filter</button>
       </div>
     </header>
   )

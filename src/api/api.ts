@@ -11,7 +11,7 @@ function getXAuth(password: string, timestamp: string) {
 }
 
 // Filter call
-export async function getFilteredItems(name?: string, price?: number, brand?: string) {
+export async function getFilteredIDs(name?: string, price?: number, brand?: string, ctrl?: AbortController) {
   const params: { product?: string, brand?: string, price?: number } = {}
   if (name) {
     params["product"] = name
@@ -32,14 +32,20 @@ export async function getFilteredItems(name?: string, price?: number, brand?: st
     body: JSON.stringify({
       "action": "filter",
       "params": params
-    })
+    }),
+    signal: ctrl?.signal,
   })
     .then((data) => data.json())
     .then((data) => data.result)
+    .catch((err) => {
+      // TODO: if aborted - do not retry
+      console.log('===', err)
+      throw err
+    })
 }
 
 // GetIds call
-export async function getIds(offset: number, limit: number): Promise<string[]> {
+export async function getIds(offset: number, limit: number, ctrl?: AbortController): Promise<string[]> {
   return fetch(API_URL, {
     method: "POST",
     headers: {
@@ -49,7 +55,8 @@ export async function getIds(offset: number, limit: number): Promise<string[]> {
     body: JSON.stringify({
       "action": "get_ids",
       "params": { "offset": offset, "limit": limit }
-    })
+    }),
+    signal: ctrl?.signal
   })
     .then((data) => data.json())
     .then((data) => data.result)
@@ -63,7 +70,7 @@ export type Card = {
 }
 
 // GetItems call (limit: 100)
-export async function getCards(ids: string[]): Promise<Card[]> {
+export async function getCards(ids: string[], ctrl?: AbortController): Promise<Card[]> {
   return fetch(API_URL, {
     method: "POST",
     headers: {
@@ -73,7 +80,8 @@ export async function getCards(ids: string[]): Promise<Card[]> {
     body: JSON.stringify({
       "action": "get_items",
       "params": { "ids": ids }
-    })
+    }),
+    signal: ctrl?.signal
   })
     .then((data) => data.json())
     .then((data) => data.result)

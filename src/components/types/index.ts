@@ -1,6 +1,6 @@
-import { HandleChangeProps, HeaderAndMainProps } from "./types";
+import { HandleChangeProps } from "./types";
 
+// todo: delete(?)
 export type {
   HandleChangeProps as handleChangeProps,
-  HeaderAndMainProps
 }
