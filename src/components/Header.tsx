@@ -39,7 +39,7 @@ function Header({ name, setName, brand, setBrand, price, setPrice, getFilteredCa
           value={brand} onChange={(event) => handleChangeText({ event, type: 'brand' })} />
         <input type='text' placeholder='price' className='w-60 h-12 border-2 text-lg'
           value={price} onChange={(event) => handleChangeNumber({ event })} />
-        <button onClick={() => getFilteredCards()}>Filter</button>
+        <button className='bg-yellow-200'onClick={() => getFilteredCards()}>Filter</button>
       </div>
     </header>
   )

@@ -12,26 +12,29 @@ function Main({ cards, handleClickNext, handleClickPrev, loading }: MainProps) {
   return (
     <main className="min-h-full w-full flex flex-col justify-center items-center">
       <div className="flex flex-wrap px-20 py-10 gap-x-6 w-full gap-y-6">
-        {!loading ? cards
-          .map((card) => (
-            <Card
-              id={card.id}
-              key={card.id}
-              product={card.product}
-              price={card.price}
-              brand={card.brand}
-            />
-          ))
-          : <div>Loading...</div>
+        {!loading ?
+          cards.length > 0 ?
+            cards
+              .map((card) => (
+                <Card
+                  id={card.id}
+                  key={card.id}
+                  product={card.product}
+                  price={card.price}
+                  brand={card.brand}
+                />
+              ))
+            : <p>Not Found</p>
+          : <p>Loading...</p>
         }
       </div>
       <div className="flex gap-8">
-        <button className="bg-white w-52 h-16 mb-10 rounded-xl font-bold"
+        <button className="bg-white w-52 h-16 mb-10 rounded-xl font-bold select-none"
           onClick={() => handleClickPrev()}
         >
-          Prev
+          Back
         </button>
-        <button className="bg-white w-52 h-16 mb-10 rounded-xl font-bold"
+        <button className="bg-white w-52 h-16 mb-10 rounded-xl font-bold select-none"
           onClick={() => handleClickNext()}
         >
           Next

@@ -38,7 +38,6 @@ export async function getFilteredIDs(name?: string, price?: number, brand?: stri
     .then((data) => data.json())
     .then((data) => data.result)
     .catch((err) => {
-      // TODO: if aborted - do not retry
       console.log('===', err)
       throw err
     })
