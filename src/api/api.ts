@@ -1,6 +1,9 @@
 import CryptoJS from 'crypto-js';
 
 const API_URL = 'http://api.valantis.store:40000/';
+// we could use .env file, or kind of that to hide password but
+// as soon as API seems to be publicly available and the password
+// is posted in public documentation it seems to be okay to leave it here
 const PASSWORD = 'Valantis';
 const CURRENT_DATE = new Date().toISOString().slice(0, 10).replace(/-/g, '');
 const xAuth = getXAuth(PASSWORD, CURRENT_DATE);
@@ -41,11 +44,7 @@ export async function getFilteredIDs(
     signal: ctrl?.signal,
   })
     .then((data) => data.json())
-    .then((data) => data.result)
-    .catch((err) => {
-      console.log('===', err);
-      throw err;
-    });
+    .then((data) => data.result);
 }
 
 // GetIds call

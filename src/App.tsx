@@ -17,10 +17,12 @@ function App() {
       setLoading(true);
       ctrlRef.current?.abort();
       ctrlRef.current = new AbortController();
-      getUniqueCardsDefault(ctrlRef.current).then((cards) => {
-        setLoading(false);
-        cards && setCards(cards);
-      });
+      getUniqueCardsDefault(ctrlRef.current)
+        .then((cards) => {
+          setLoading(false);
+          cards && setCards(cards);
+        })
+        .catch(console.error);
     }
   }, [price, name, brand]);
 
@@ -33,7 +35,7 @@ function App() {
       brand,
       price,
       ctrl: ctrlRef.current,
-    }).catch();
+    }).catch(console.error);
     setLoading(false);
     cards && setCards(cards);
   }
@@ -43,7 +45,9 @@ function App() {
     ctrlRef.current?.abort();
     ctrlRef.current = new AbortController();
     if (!name && !brand && !price) {
-      const cards = await getUniqueCardsDefault(ctrlRef.current, false).catch();
+      const cards = await getUniqueCardsDefault(ctrlRef.current, false).catch(
+        console.error,
+      );
       setLoading(false);
       cards && setCards(cards);
     } else {
@@ -54,7 +58,7 @@ function App() {
         ctrl: ctrlRef.current,
         move: 'next',
         clear: false,
-      }).catch();
+      }).catch(console.error);
       setLoading(false);
       cards && setCards(cards);
     }
@@ -69,7 +73,7 @@ function App() {
         ctrlRef.current,
         false,
         true,
-      ).catch();
+      ).catch(console.error);
       setLoading(false);
       cards && setCards(cards);
     } else {
@@ -80,7 +84,7 @@ function App() {
         ctrl: ctrlRef.current,
         move: 'back',
         clear: false,
-      }).catch();
+      }).catch(console.error);
       setLoading(false);
       cards && setCards(cards);
     }

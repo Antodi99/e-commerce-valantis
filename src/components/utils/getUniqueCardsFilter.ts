@@ -1,8 +1,6 @@
-// import debounce from 'lodash/debounce'
 import { Card as TCard, getFilteredIDs } from '../../api/api';
 import { getUniqueCards } from './getUniqueCards';
 import { retry } from './retry';
-import { debounce } from './debounce';
 
 let offsetHistory: number[] = [];
 const uniqIDs = new Map();
@@ -45,7 +43,8 @@ export async function getUniqueCardsFiltered({
       endFilterPos -= 50;
     }
     return cards.slice(startFilterPos, endFilterPos);
-  } else if (move === 'next') {
+  }
+  if (move === 'next') {
     if (endFilterPos <= (offsetHistory.length - 1) * 50) {
       startFilterPos += 50;
       endFilterPos += 50;
@@ -74,9 +73,3 @@ export async function getUniqueCardsFiltered({
   cards = await getUniqueCards(chunk, ctrl);
   return cards.slice(0, 50);
 }
-
-// TODO: debounce should works properly
-export const getUniqueCardsFilteredWithDebounce = debounce(
-  getUniqueCardsFiltered,
-  1500,
-);
