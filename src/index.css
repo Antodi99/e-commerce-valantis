@@ -6,19 +6,13 @@ html,
 body {
   height: 100%;
   width: 100%;
-  background-image: radial-gradient(
-    circle,
-    #e1c385,
-    #e8ca8c,
-    #efd093,
-    #f7d79a,
-    #fedea1
-  );
+  background-color: #242124;
 }
 
 input::placeholder {
   transition: 0.5s;
   color: rgb(36, 33, 36);
+  padding-left: 10px;
 }
 
 input:focus::placeholder {

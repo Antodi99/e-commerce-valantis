@@ -7,8 +7,8 @@ export default {
         'main-black': '#242124',
       },
       height: {
-        'main': 'calc(100vh - 5rem)'
-      }
+        main: 'calc(100vh - 5rem)',
+      },
     },
   },
   plugins: [],

@@ -1,8 +1,8 @@
 import CryptoJS from 'crypto-js';
 
-const API_URL = 'http://api.valantis.store:40000/'
-const PASSWORD = 'Valantis'
-const CURRENT_DATE = new Date().toISOString().slice(0, 10).replace(/-/g, '')
+const API_URL = 'http://api.valantis.store:40000/';
+const PASSWORD = 'Valantis';
+const CURRENT_DATE = new Date().toISOString().slice(0, 10).replace(/-/g, '');
 const xAuth = getXAuth(PASSWORD, CURRENT_DATE);
 
 function getXAuth(password: string, timestamp: string) {
@@ -11,77 +11,89 @@ function getXAuth(password: string, timestamp: string) {
 }
 
 // Filter call
-export async function getFilteredIDs(name?: string, price?: number, brand?: string, ctrl?: AbortController) {
-  const params: { product?: string, brand?: string, price?: number } = {}
+export async function getFilteredIDs(
+  name?: string,
+  price?: number,
+  brand?: string,
+  ctrl?: AbortController,
+) {
+  const params: { product?: string; brand?: string; price?: number } = {};
   if (name) {
-    params["product"] = name
+    params['product'] = name;
   }
   if (brand) {
-    params["brand"] = brand
+    params['brand'] = brand;
   }
   if (price && price !== 0) {
-    params["price"] = price
+    params['price'] = price;
   }
 
   return fetch(API_URL, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "X-Auth": xAuth,
-      "Content-Type": "application/json"
+      'X-Auth': xAuth,
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      "action": "filter",
-      "params": params
+      action: 'filter',
+      params: params,
     }),
     signal: ctrl?.signal,
   })
     .then((data) => data.json())
     .then((data) => data.result)
     .catch((err) => {
-      console.log('===', err)
-      throw err
-    })
+      console.log('===', err);
+      throw err;
+    });
 }
 
 // GetIds call
-export async function getIds(offset: number, limit: number, ctrl?: AbortController): Promise<string[]> {
+export async function getIds(
+  offset: number,
+  limit: number,
+  ctrl?: AbortController,
+): Promise<string[]> {
   return fetch(API_URL, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "X-Auth": xAuth,
-      "Content-Type": "application/json"
+      'X-Auth': xAuth,
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      "action": "get_ids",
-      "params": { "offset": offset, "limit": limit }
+      action: 'get_ids',
+      params: { offset: offset, limit: limit },
     }),
-    signal: ctrl?.signal
+    signal: ctrl?.signal,
   })
     .then((data) => data.json())
-    .then((data) => data.result)
+    .then((data) => data.result);
 }
 
 export type Card = {
-  brand: string,
-  id: string,
-  price: number,
-  product: string
-}
+  brand: string;
+  id: string;
+  price: number;
+  product: string;
+};
 
 // GetItems call (limit: 100)
-export async function getCards(ids: string[], ctrl?: AbortController): Promise<Card[]> {
+export async function getCards(
+  ids: string[],
+  ctrl?: AbortController,
+): Promise<Card[]> {
   return fetch(API_URL, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "X-Auth": xAuth,
-      "Content-Type": "application/json"
+      'X-Auth': xAuth,
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      "action": "get_items",
-      "params": { "ids": ids }
+      action: 'get_items',
+      params: { ids: ids },
     }),
-    signal: ctrl?.signal
+    signal: ctrl?.signal,
   })
     .then((data) => data.json())
-    .then((data) => data.result)
+    .then((data) => data.result);
 }

@@ -1,9 +1,9 @@
 export type CardProps = {
-  id: string,
-  product: string,
-  price: number,
-  brand: null | string
-}
+  id: string;
+  product: string;
+  price: number;
+  brand: null | string;
+};
 
 function Card({ id, product, price, brand }: CardProps) {
   return (
@@ -19,7 +19,7 @@ function Card({ id, product, price, brand }: CardProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Card;
